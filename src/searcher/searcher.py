@@ -8,7 +8,7 @@ import json,requests,copy
 import numpy as np
 from loguru import logger
 from src.searcher.vec_searcher.vec_searcher import VecSearcher
-from src.models.vec_model import VectorizeModel
+from src.models.vec_model.vec_model import VectorizeModel
 
 class Searcher:
     def __init__(self, model_path, vec_search_path):

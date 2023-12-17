@@ -13,7 +13,7 @@ from tornado.web import RequestHandler, Application
 from tornado.httpserver import HTTPServer
 from tornado.options import options, define
 
-from src.models.vec_model import VectorizeModel
+from src.models.vec_model.vec_model import VectorizeModel
 
 class VecModelHandler(RequestHandler):
     

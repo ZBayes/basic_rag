@@ -5,7 +5,7 @@ from loguru import logger
 
 from transformers import BertTokenizer
 
-from src.models.simcse_model import SimcseModel
+from src.models.vec_model.simcse_model import SimcseModel
 
 class VectorizeModel:
     def __init__(self, ptm_model_path, device = "cpu") -> None:
@@ -15,6 +15,7 @@ class VectorizeModel:
         
         # self.DEVICE = torch.device('cuda' if torch.cuda.is_available() else "cpu")
         self.DEVICE = device
+        logger.info(device)
         self.model.to(self.DEVICE)
         
         self.pdist = nn.PairwiseDistance(2)

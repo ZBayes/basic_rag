@@ -9,7 +9,7 @@ from tqdm import tqdm
 from loguru import logger
 from multiprocessing import Process,Queue
 from multiprocessing import set_start_method
-from src.models.vec_model import VectorizeModel
+from src.models.vec_model.vec_model import VectorizeModel
 from src.searcher.vec_searcher.vec_searcher import VecSearcher 
 
 if __name__ == "__main__":

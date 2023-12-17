@@ -57,6 +57,9 @@ def batch_test(query_list, process_num, request_num):
 if __name__ == "__main__":
     url = "http://127.0.0.1:9090/searcher"
     print(run_client(url, "什么人不能吃花生")) # 单元测试
+    url = "http://127.0.0.1:9092/llm_model"
+    print(run_client(url, "什么人不能吃花生")) # 单元测试
+
 
 
     # time_list = [0]

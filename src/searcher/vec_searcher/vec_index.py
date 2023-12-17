@@ -6,7 +6,7 @@
 
 import faiss
 from loguru import logger
-from src.models.vec_model import VectorizeModel
+from src.models.vec_model.vec_model import VectorizeModel
 
 class VecIndex:
     def __init__(self) -> None:
