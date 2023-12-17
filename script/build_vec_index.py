@@ -12,21 +12,6 @@ from multiprocessing import set_start_method
 from src.models.vec_model import VectorizeModel
 from src.searcher.vec_searcher.vec_searcher import VecSearcher 
 
-def vectorize(model_path, device, source_index_data_item, process_id, vec_searcher):
-    vec_model = VectorizeModel(model_path, device)
-    vecs_result = []
-    for q in tqdm(source_index_data_item, desc="running: {}".format(process_id)):
-        vec = vec_model.predict_vec(q[0]).cpu().numpy()
-        tmp_result = copy.deepcopy(q)
-        tmp_result.append(vec)
-        # vecs_result.append(copy.deepcopy(tmp_result))
-        vec_searcher.insert(tmp_result[2], tmp_result[:2])
-    # queue.put(vecs_result)
-    # return vecs_result
-
-# def vec_searcher_insert(vecs, searcher_index, process_id):
-
-
 if __name__ == "__main__":
     # 0. 必要配置
     VEC_MODEL_PATH = "C:/work/tool/huggingface/models/simcse-chinese-roberta-wwm-ext"
@@ -60,30 +45,6 @@ if __name__ == "__main__":
     vec_searcher.build(index_dim, VEC_INDEX_DATA)
 
     # 2.2 推理向量
-
-    # 数据均分
-    # query_pool = [[] for i in range(PROCESS_NUM)]
-    # pool_idx = 0
-    # for idx in range(len(source_index_data)):
-    #     query_pool[pool_idx].append(source_index_data[idx])
-    #     pool_idx = (pool_idx + 1) % PROCESS_NUM
-    # logger.info("query_pool: {}".format([len(i) for i in query_pool]))
-    # process_pool = []
-    # for idx in range(PROCESS_NUM):
-    #     process_vectorize = Process(target=vectorize, args=(VEC_MODEL_PATH, DEVICE, query_pool[idx], idx, vec_searcher))
-    #     process_pool.append(process_vectorize)
-
-    # processes = [process_searcher]
-    # vectorize_result = []
-    # for process in process_pool:
-    #     process.start()
-    # for process in process_pool:
-    #     process.join()
-    # while not queue.empty():
-        # results.append(queue.get())
-        # vectorize_result.extend(queue.get())
-    # logger.info("vectorize done:".format(len(vectorize_result)))
-
     vectorize_result = []
     for q in tqdm(source_index_data):
         vec = vec_model.predict_vec(q[0]).cpu().numpy()

@@ -48,7 +48,7 @@ class SearcherHandler(RequestHandler):
 def StartSearcherHandler(request_config: dict, searcher: Searcher):
     # 启动TestClass服务的进程
     # 注：如果是同端口，只是不同的url路径，则直接都放在handler_routes里面即可
-    # 注：test_class需要在外面初始化后再传进来，而不能在initialize里面加载，initialize是每次请求都会执行一遍，例如知识问答的索引更新，肯定不能在这里面修改
+    # 注：test_class需要在外面初始化后再传进来，而不能在initialize里面加载，initialize是每次请求都会执行一遍，例如Searcher下的模型类，肯定不能在这里面修改
     handler_routes = [(request_config["url_suffix"], SearcherHandler, {"searcher":searcher})]
     app = Application(handlers=handler_routes)
     http_server = HTTPServer(app)
