@@ -55,10 +55,13 @@ def batch_test(query_list, process_num, request_num):
 # print(json.loads(response.text))
 
 if __name__ == "__main__":
-    url = "http://127.0.0.1:9090/searcher"
-    print(run_client(url, "什么人不能吃花生")) # 单元测试
-    url = "http://127.0.0.1:9092/llm_model"
-    print(run_client(url, "什么人不能吃花生")) # 单元测试
+    from loguru import logger
+    # url = "http://127.0.0.1:9090/searcher"
+    # logger.info(run_client(url, "什么人不能吃花生")) # 单元测试
+    # url = "http://127.0.0.1:9092/llm_model"
+    # logger.info(run_client(url, "什么人不能吃花生")) # 单元测试
+    url = "http://127.0.0.1:9093/dialogue_manager"
+    logger.info(run_client(url, "什么人不能吃花生")) # 单元测试
 
 
 

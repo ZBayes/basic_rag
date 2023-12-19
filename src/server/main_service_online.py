@@ -17,17 +17,18 @@ from multiprocessing import Process
 from src.searcher.searcher import Searcher
 from src.models.vec_model.vec_model import VectorizeModel
 from src.models.llm.llm_model import LlmModel
+from src.dm.dialogue_manager import DialogueManager
 
 from src.server.handlers.search_handler import SearcherHandler,StartSearcherHandler
 # from src.server.handlers.vec_model_handler import VecModelHandler,StartVecModelHandler
 from src.server.handlers.llm_handler import LlmModel,StartLlmHandler
+from src.server.handlers.dialogue_manager_handler import DialogueManagerHandler, StartDialogueManagerHandler
 
 def launch_service(config, model_mode):
     if model_mode == "llm_model":
         # 解决windows下多进程使用pt会导致pickle序列化失败的问题，https://blog.csdn.net/qq_21774161/article/details/127145749
         llm_model = LlmModel(config["process_llm_model"]["model_path"], config["process_llm_model"]["model_config"])
         StartLlmHandler(config["process_llm_model"], llm_model)
-        # process_llm_model = Process(target=StartLlmHandler, args=(config["process_llm_model"], llm_model))
         # processes = [process_llm_model]
         # for process in processes:
         #     process.start()
@@ -37,11 +38,13 @@ def launch_service(config, model_mode):
         searcher = Searcher(config["process_searcher"]["VEC_MODEL_PATH"], config["process_searcher"]["VEC_INDEX_DATA"])
         process_searcher = Process(target=StartSearcherHandler, args=(config["process_searcher"], searcher))
 
+        dialogue_manager = DialogueManager(config["process_dialogue_manager"])
+        process_dialogue_manager = Process(target=StartDialogueManagerHandler, args=(config["process_dialogue_manager"], dialogue_manager))
         # vec_model = VectorizeModel(config["process_vec_model"]["VEC_MODEL_PATH"])
         # process_vec_model = Process(target=StartVecModelHandler, args=(config["process_vec_model"], vec_model))
 
         # processes = [process_searcher]
-        processes = [process_searcher]
+        processes = [process_searcher, process_dialogue_manager]
         for process in processes:
             process.start()
         for process in processes:
@@ -61,6 +64,10 @@ if __name__ == "__main__":
              "process_llm_model":{"port":9092, 
                                       "url_suffix":"/llm_model", 
                                       "model_path":"C:\\work\\tool\\chatglm2-6b",
-                                      "model_config":{}}
+                                      "model_config":{}},
+             "process_dialogue_manager":{"port":9093, 
+                                      "url_suffix":"/dialogue_manager",
+                                      "config":{"search_url":"http://127.0.0.1:9090/searcher",
+                                                "llm_url":"http://127.0.0.1:9092/llm_model"}}
     }
     launch_service(config, sys.argv[1])
